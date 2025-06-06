@@ -4,53 +4,50 @@ import { NextResponse } from "next/server";
 
 export async function GET (
     _req: Request,
-    { params }: { params: {categoryId: string } }
+    { params }: { params: {colorId: string } }
 ) {
     try {
-        if (!params.categoryId) {
-            return new NextResponse("Billboard id is required", {status: 400});
+        if (!params.colorId) {
+            return new NextResponse("Color id is required", {status: 400});
         }
 
-        const category = await prismadb.category.findUnique({
+        const color = await prismadb.color.findUnique({
             where: {
-                id: (await params).categoryId
+                id: (await params).colorId
 
-            },
-            include: {
-                billboard: true,
             }
         });
 
-        return NextResponse.json(category);
+        return NextResponse.json(color);
     } catch (error) {
-        console.log('[CATEGORY_GET]', error);
+        console.log('[COLOR_GET]', error);
         return new NextResponse("Internal error", { status: 500 });
     }
 }
 
 export async function PATCH (
     req: Request,
-    { params }: { params: { storeId: string, categoryId: string } }
+    { params }: { params: { storeId: string, colorId: string } }
 ) {
     try {
         const { userId } = await auth();
         const body = await req.json();
-        const { name, billboardId } = body;
+        const { name, value } = body;
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
         }
 
         if (!name) {
-            return new NextResponse("Category is required", { status:  400});
+            return new NextResponse("Name is required", { status:  400});
         }
 
-        if (!billboardId) {
-            return new NextResponse("Billboard ID is required", { status:  400});
+        if (!value) {
+            return new NextResponse("Value is required", { status:  400});
         }
 
-        if (!(await params).categoryId) {
-            return new NextResponse("Category id is required", {status: 400});
+        if (!(await params).colorId) {
+            return new NextResponse("Color id is required", {status: 400});
         }
 
         const storeByUserId = await prismadb.store.findFirst({
@@ -64,26 +61,26 @@ export async function PATCH (
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
-        const category = await prismadb.category.updateMany({
+        const color = await prismadb.color.updateMany({
             where: {
-                id: (await params).categoryId
+                id: (await params).colorId
             },
             data: {
                 name,
-                billboardId
+                value
             }
         });
 
-        return NextResponse.json(category);
+        return NextResponse.json(color);
     } catch (error) {
-        console.log('[CATEGORY_PATCH]', error);
+        console.log('[COLOR_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });
     }
 }
 
 export async function DELETE (
     _req: Request,
-    { params }: { params: { storeId: string, categoryId: string } }
+    { params }: { params: { storeId: string, colorId: string } }
 ) {
     try {
         const { userId } = await auth();
@@ -92,8 +89,8 @@ export async function DELETE (
             return new NextResponse("Unauthenticated", { status: 401 });
         }
 
-        if (!params.categoryId) {
-            return new NextResponse("Category id is required", {status: 400});
+        if (!params.colorId) {
+            return new NextResponse("Color id is required", {status: 400});
         }
 
         const storeByUserId = await prismadb.store.findFirst({
@@ -107,16 +104,16 @@ export async function DELETE (
             return new NextResponse("Unauthorized", { status: 403 });
         }        
 
-        const category = await prismadb.category.deleteMany({
+        const color = await prismadb.color.deleteMany({
             where: {
-                id: params.categoryId
+                id: params.colorId
 
             }
         });
 
-        return NextResponse.json(category);
+        return NextResponse.json(color);
     } catch (error) {
-        console.log('[CATEGORY_DELETE]', error);
+        console.log('[COLOR_DELETE]', error);
         return new NextResponse("Internal error", { status: 500 });
     }
 }

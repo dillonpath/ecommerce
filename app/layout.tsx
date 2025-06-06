@@ -11,6 +11,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ModalProvider } from '@/providers/modal-provider'
 import { ToasterProvider } from '@/providers/toast-provider'
+import { ThemeProvider } from '@/providers/theme-provider'
 
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
     <ClerkProvider afterSignOutUrl={"/"}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SignedOut>
               <SignInButton />
               <SignUpButton />
@@ -46,6 +48,7 @@ export default function RootLayout({
             <ToasterProvider />
             <ModalProvider />
           {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
