@@ -16,10 +16,10 @@ interface DashboardPageProps {
 const DashBoardPage: React.FC<DashboardPageProps> = async ({
     params
 }) => {
-    const totalRevenue = await getTotalRevenue(params.storeId);
-    const salesCount = await getSalesCount(params.storeId);
-    const stockCount = await getStockCount(params.storeId);
-    const graphRevenue = await getGraphRevenue(params.storeId);
+    const totalRevenue = await getTotalRevenue((await params).storeId);
+    const salesCount = await getSalesCount((await params).storeId);
+    const stockCount = await getStockCount((await params).storeId);
+    const graphRevenue = await getGraphRevenue((await params).storeId);
 
     return (
         <div className="flex-col">
