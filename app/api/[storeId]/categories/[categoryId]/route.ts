@@ -7,7 +7,7 @@ export async function GET (
     { params }: { params: {categoryId: string } }
 ) {
     try {
-        if (!params.categoryId) {
+        if (!(await params).categoryId) {
             return new NextResponse("Billboard id is required", {status: 400});
         }
 

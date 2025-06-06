@@ -102,13 +102,13 @@ export async function GET(
         const colorId = searchParams.get("colorId") || undefined;
         const isFeatured = searchParams.get("isFeatured");
 
-        if (!params.storeId) {
+        if (!(await params).storeId) {
             return new NextResponse("Store ID is required", {status: 400});
         }
 
         const products = await prismadb.product.findMany({
             where: {
-                storeId: params.storeId,
+                storeId: (await params).storeId,
                 categoryId,
                 colorId,
                 sizeId,

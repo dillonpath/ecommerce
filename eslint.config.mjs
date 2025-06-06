@@ -9,15 +9,19 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+
+export default [
+  // Inherit next.js rules
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
+  // Your custom rules
+  {
+    files: ["**/*.{ts,tsx}"], // Applies only to TypeScript files
+    rules: {
+      // Disable both base and TS-specific unused-vars rules
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ];
-
-module.exports = {
-      rules: {
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-explicit-any": "off"
-      },
-    }
-
-export default eslintConfig;
